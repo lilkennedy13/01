@@ -1,0 +1,74 @@
+package ru.daa.demo1.util;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import ru.daa.demo1.HelloApplication;
+import ru.daa.demo1.model.Employee;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+
+
+public class Mgr {
+    public static final List<Employee> dataList=new ArrayList<>();
+    public static Stage mainStage;
+    public static void MessageBox(String title, String header, String message, Alert.AlertType alertType)
+    {
+        Alert alert=new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+    public static Optional<ButtonType> showConfirmPopup(){
+        Alert alert= new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Удалить");
+        alert.setHeaderText("Вы дейстительно хотите удалить записать");
+        Optional<ButtonType> result=alert.showAndWait();
+        return result;
+    }
+    public static void showMainStage(Stage stage, String fxmlFileName, String title){
+        FXMLLoader fxmlLoader=new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
+        try{
+            Scene scene=new Scene(fxmlLoader.load());
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.setMinWidth(300);
+            stage.setMaxHeight(1080);
+            stage.setMaximized(true);
+            mainStage=stage;
+            stage.show();
+        }
+        catch(IOException e){
+            throw new RuntimeException(e);
+        }
+    }
+    public static void showEditStage(String fxmlFileName, String title){
+        Stage newStage=new Stage();
+        FXMLLoader fxmlLoader=new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
+        try{
+            Scene scene=new Scene(fxmlLoader.load());
+            newStage.setScene(scene);
+            newStage.setTitle(title);
+            newStage.setMinWidth(300);
+            newStage.setMaxHeight(1080);
+            newStage.initOwner(mainStage);
+            newStage.setResizable(false);
+            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.showAndWait();
+        }
+        catch (IOException e){
+
+
+        }
+    }
+
+}
