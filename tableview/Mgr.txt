@@ -1,25 +1,73 @@
-package ru.daa.demo1.util;
+package ru.staroverov.staroverov.util;
 
-import javafx.fxml.FXML;
+import ru.staroverov.staroverov.HelloApplication;
+import ru.staroverov.staroverov.model.Employee;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ru.daa.demo1.HelloApplication;
-import ru.daa.demo1.model.Employee;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
-
+import java.util.Scanner;
 
 public class Mgr {
-    public static final List<Employee> dataList=new ArrayList<>();
+    public static final ArrayList<Employee> dataList = new ArrayList<>();
+
+
     public static Stage mainStage;
+
+    public static Employee currentEmployee;
+
+    public static void showMainStage(Stage stage, String fxmlFilename, String title)
+    {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+        try
+        {
+            Scene scene=new Scene(fxmlLoader.load(),800, 600);
+            stage.setScene(scene);
+            stage.setTitle(title);
+            stage.setMinWidth(300);
+            stage.setHeight(200);
+            stage.setMaximized(true);
+            mainStage=stage;
+            stage.show();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+    public static void showEditStage(String fxmlFileName, String title)
+    {
+        Stage newStage=new Stage();
+        FXMLLoader fxmlloader=new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
+        try
+        {
+            Scene scene=new Scene(fxmlloader.load());
+            newStage.setScene(scene);
+            newStage.setTitle(title);
+            newStage.setMinWidth(300);
+            newStage.setHeight(200);
+
+            newStage.initOwner(mainStage);
+
+            newStage.setResizable(false);
+
+            newStage.initModality(Modality.WINDOW_MODAL);
+            newStage.showAndWait();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
     public static void MessageBox(String title, String header, String message, Alert.AlertType alertType)
     {
         Alert alert=new Alert(alertType);
@@ -28,47 +76,12 @@ public class Mgr {
         alert.setContentText(message);
         alert.showAndWait();
     }
-    public static Optional<ButtonType> showConfirmPopup(){
-        Alert alert= new Alert(Alert.AlertType.CONFIRMATION);
+    public static Optional<ButtonType> showConfirmPopup()
+    {
+        Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Удалить");
-        alert.setHeaderText("Вы дейстительно хотите удалить записать");
+        alert.setContentText("Вы действительно хотите удалить запись?");
         Optional<ButtonType> result=alert.showAndWait();
         return result;
     }
-    public static void showMainStage(Stage stage, String fxmlFileName, String title){
-        FXMLLoader fxmlLoader=new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
-        try{
-            Scene scene=new Scene(fxmlLoader.load());
-            stage.setScene(scene);
-            stage.setTitle(title);
-            stage.setMinWidth(300);
-            stage.setMaxHeight(1080);
-            stage.setMaximized(true);
-            mainStage=stage;
-            stage.show();
-        }
-        catch(IOException e){
-            throw new RuntimeException(e);
-        }
-    }
-    public static void showEditStage(String fxmlFileName, String title){
-        Stage newStage=new Stage();
-        FXMLLoader fxmlLoader=new FXMLLoader(HelloApplication.class.getResource(fxmlFileName));
-        try{
-            Scene scene=new Scene(fxmlLoader.load());
-            newStage.setScene(scene);
-            newStage.setTitle(title);
-            newStage.setMinWidth(300);
-            newStage.setMaxHeight(1080);
-            newStage.initOwner(mainStage);
-            newStage.setResizable(false);
-            newStage.initModality(Modality.WINDOW_MODAL);
-            newStage.showAndWait();
-        }
-        catch (IOException e){
-
-
-        }
-    }
-
 }
