@@ -1,12 +1,12 @@
-package ru.daa.demo1.controller;
+package ru.staroverov.staroverov.controller;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import ru.daa.demo1.model.Employee;
-import ru.daa.demo1.model.Manager;
+import ru.staroverov.staroverov.model.Employee;
+import ru.staroverov.staroverov.model.Manager;
 
 import javafx.event.ActionEvent;
 import java.io.BufferedReader;
@@ -16,13 +16,18 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import static ru.daa.demo1.util.Mgr.dataList;
-import static ru.daa.demo1.util.Mgr.showConfirmPopup;
+import static ru.staroverov.staroverov.util.Mgr.*;
 
 public class MainController implements Initializable {
 
     @FXML
     private TableView<Employee> ViewSale;
+
+    @FXML
+    private Button add;
+
+    @FXML
+    private Button btnnew;
 
     @FXML
     private Button delete;
@@ -32,9 +37,26 @@ public class MainController implements Initializable {
 
     @FXML
     private TableColumn<Employee, Number> tableSale;
+    @FXML
+    void addAction(ActionEvent event) {
+        currentEmployee=ViewSale.getSelectionModel().getSelectedItem();
+        if(currentEmployee==null)
+            return;
+        showEditStage("edit-view.fxml","изменить");
+        loadTableView();
+
+
+    }
+    @FXML
+    void newAction(ActionEvent event) {
+        currentEmployee=null;
+        showEditStage("edit-view.fxml","добавить");
+        loadTableView();
+
+    }
 
     @FXML
-     void ddd(ActionEvent event) {
+    void deleteAction(ActionEvent event){
         Employee employee=ViewSale.getSelectionModel().getSelectedItem();
         if(employee==null)
             return;
@@ -70,7 +92,7 @@ public class MainController implements Initializable {
     private void loadData() {
         int count=0;
         try{
-            BufferedReader br=new BufferedReader(new FileReader("C:\\Users\\staro\\IdeaProjects\\demo\\2.txt"));
+            BufferedReader br=new BufferedReader(new FileReader("/home/prog/IdeaProjects/staroverov/1.txt"));
             String line;
             while((line =br.readLine())!=null){
                 String[]words=line.split(";",0);
@@ -90,4 +112,3 @@ public class MainController implements Initializable {
     }
 
 }
-
