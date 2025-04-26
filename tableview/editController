@@ -1,0 +1,99 @@
+package ru.staroverov.staroverov.controller;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import ru.staroverov.staroverov.model.Manager;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static ru.staroverov.staroverov.util.Mgr.*;
+
+public class EditController implements Initializable {
+
+    @FXML
+    private Button save;
+
+    @FXML
+    private TextField textName;
+
+    @FXML
+    private TextField textSale;
+
+    @FXML
+    void saveAction(ActionEvent event) {
+        String error=checkFields().toString();
+        if(!error.isEmpty()){
+            MessageBox("ошибка","заполните поля",error, Alert.AlertType.ERROR);
+            return;
+        }
+        if(currentEmployee==null){
+            add();
+        }
+        else {
+            update();
+        }
+        textSale.clear();
+        textName.clear();
+        save.getScene().getWindow().hide();
+
+
+    }
+
+    void update() {
+        int index=dataList.indexOf(currentEmployee);
+        currentEmployee.setS(Double.parseDouble(textSale.getText()));
+        currentEmployee.setName(textName.getText().toString());
+        dataList.add(currentEmployee);
+        MessageBox("информация","","данные сохранены",Alert.AlertType.INFORMATION);
+    }
+
+    void add() {
+        currentEmployee=new Manager(0,"");
+        currentEmployee.setS(Double.parseDouble(textSale.getText()));
+        currentEmployee.setName(textName.getText().toString());
+        dataList.add(currentEmployee);
+        MessageBox("информация","","данные сохранены",Alert.AlertType.INFORMATION);
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        if(currentEmployee!=null){
+            textSale.setText(String.valueOf(currentEmployee.getS()));
+            textName.setText(currentEmployee.getName());
+        }
+
+
+    }
+    boolean isProverka(String sale){
+        if(sale==null)
+            return false;
+        try{
+            double d=Double.parseDouble(sale);
+        }
+        catch (NumberFormatException e){
+            return false;
+        }
+        return true;
+    }
+    StringBuilder checkFields(){
+        StringBuilder error=new StringBuilder();
+        if(textSale.getText().isEmpty()){
+            error.append("укажите зарплату\n");
+        }
+        if(textName.getText().isEmpty()){
+            error.append("укажите фамилию\n");
+        }
+        if(!isProverka(textSale.getText())){
+            error.append("должно быть число!");
+        }
+        return error;
+    }
+
+
+}
